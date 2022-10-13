@@ -44,7 +44,7 @@ public class AppRoundRobin{
         try {
             String data = "value=" + a;
             System.out.println(f);
-            URL url = new URL("http://logservice" + f + ":3500" + f + "/backend"); // http://localhost:35001/backend
+            URL url = new URL("http://logcontainer" + f + ":3500" + f);
             System.out.println(url.toString());
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");

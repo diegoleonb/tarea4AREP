@@ -19,7 +19,7 @@ public class MongoConnection {
 
     public static void main(String[] args) {
         port(getPort());
-        post("/backend",(req, res)->{
+        post("/",(req, res)->{
             res.type("application/json");
             return insert(req.queryParams("value"));
         });
@@ -33,14 +33,14 @@ public class MongoConnection {
 
     private static String insert(String a){
         MongoClient mongoClient = new MongoClient("db");
-        MongoDatabase db = mongoClient.getDatabase("LongService");
+        MongoDatabase db = mongoClient.getDatabase("LogService");
         MongoCollection<Document> collection = db.getCollection("datos");
         if(collection.countDocuments()==10){
             collection.deleteOne(Filters.eq("id",0));
             Document nDocument = new Document().append("$inc", new Document().append("id", -1));
             collection.updateMany(Filters.gt("id",0),nDocument);
         }
-        Document document = new Document().append("id", (int)collection.countDocuments()).append("value", a).append("date", formatter.format(new Date()));
+        Document document = new Document().append("id", (int)collection.countDocuments()).append("value", a).append("fecha", formatter.format(new Date()));
         collection.insertOne(document);
         ArrayList<String> res = new ArrayList<>();
         collection.find().forEach((Consumer<Document>) (Document d) -> { d.remove("_id");d.remove("id");res.add(d.toJson());});

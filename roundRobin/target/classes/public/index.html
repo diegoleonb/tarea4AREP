@@ -1,27 +1,57 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Round Robin</title>
+        <title >APP-LB-RoundRobin</title>
     </head>
-    <body>
-        <h1>Round Robin</h1>
-        <form action="/log">
-            <label for="postvalue">Value: </label><br>
-            <input type="text" id="postvalue" name="value" placeholder="Enter a message to save"><br><br>
-            <input type="button" value="Submit" onclick="loadPostMsg(postvalue)">
-        </form>
-
-        <div id="postrespmsg"></div>
+    <body style="background-color:#C8C8C8;">
+        <section>
+            <h1 style="color:#02233E ;">APP-LB-RoundRobin</h1>
+        </section>
+        <section>
+            <div>
+                <input id="value" placeholder="Value: " type="text" class="cadenainput" />
+                <button onclick="postValue()" >Enviar</button>
+            </div>
+            <div class="table">
+                <h2 style="color:#0F5A9A ;">Base de Datos</h2>
+                <table id="tabla">
+                    <tr>
+                        <th style="color:#0F5A9A ;">Fecha</th>
+                        <th style="color:#0F5A9A ;">Value</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
         
         <script>
-            function loadPostMsg(name) {
-                let url = "/log?value=" + name.value;
-                fetch(url, { method: 'POST' })
-                    .then(x => x.text())
-                    .then(y => document.getElementById("postrespmsg").innerHTML = y);
-            }
+            function postValue() {
+                var cadena = document.getElementById("value").value;
+                document.getElementById("value").value = "";
+                var url = "/log?value=" + cadena;
+                fetch(url,{
+                    method: 'POST',
+                    mode: 'cors', 
+                    cache: 'no-cache',
+                    credentials: 'same-origin',
+                }).then(res=>res.json()).then(function (data) {
+                    console.log(data);
+                    var tbl = document.getElementById("tabla");
+                    var rowCount = tbl.rows.length;
+                    for (var x = rowCount - 1; x > 0; x--) {
+                        tbl.deleteRow(x);
+                    }
+                    data.forEach(element => {
+                        let row = tbl.insertRow();
+                        let fecha = row.insertCell();
+                        let cadena = row.insertCell();
+                        fecha.innerHTML = element.fecha;
+                        cadena.innerHTML = element.value;
+                        });
+                    });
+                }
         </script>
     </body>
 </html>

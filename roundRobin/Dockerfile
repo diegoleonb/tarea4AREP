@@ -5,4 +5,4 @@ WORKDIR /usr/app/bin
 COPY /target/classes /usr/app/bin/classes
 COPY /target/dependency /usr/app/bin/dependency
 
-CMD ["java","-cp","./classes:./dependency/*","co.edu.escuelaing.arep.AppRoundRobin"]
+CMD ["java","-cp","./classes:./dependency/*","edu.escuelaing.arep.AppRoundRobin"]
